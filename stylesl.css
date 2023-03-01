@@ -73,9 +73,10 @@ body {
     opacity: 0.6;
 }
 
-.buttons:active {
+.active, .buttons:active {
     transform: translateY(2px);
     box-shadow: 0 3px;
+    transition: .1s;
 }
 
 .operator {
