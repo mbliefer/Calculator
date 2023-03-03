@@ -30,19 +30,24 @@ const getOperatorClick = (e) => {
     startNewNum();
 }
 
-window.addEventListener('keydown', (e) => {
-    if (e.key >= 0) {
-        console.log(e.key);
-        if (output.textContent == 0) output.textContent = "";
-        output.textContent += e.key;
-        currentNum = parseFloat(output.textContent);
-    }
-})
+function removeTransition(e) {
+    this.classList.remove("active");
+}
 
+// window.addEventListener('keydown', (e) => {
+//     if (e.key >= 0) {
+//         console.log(e.key);
+//         if (output.textContent == 0) output.textContent = "";
+//         output.textContent += e.key;
+//         currentNum = parseFloat(output.textContent);
+//     }
+// })
+
+// click a number on the calculator and add to display
 numbers.forEach((number) => {
     number.addEventListener('click', getNumber)
 });
-
+// click on operator
 operators.forEach((operator) => {
     operator.addEventListener('click', getOperatorClick);
 });
@@ -55,7 +60,7 @@ window.addEventListener('keydown', (e) => {
         if (number.value == key) {
             number.classList.add("active");
             number.click();
-            number.addEventListener('transitionend', () => number.classList.remove("active"));
+            number.addEventListener('transitionend', removeTransition);
         };
     });
     operators.forEach((operator) => {
