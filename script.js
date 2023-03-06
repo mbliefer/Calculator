@@ -64,15 +64,17 @@ const handleOperatorClick = (e) => {
     if (firstNum === '') {
         firstNum = secondNum;
         shouldResetScreen = true;
-        console.log(operation);
+        console.log(firstNum);
     }
     if (operation === "Enter" || operation === "=") {
         e.preventDefault();
         total = operate(operation, firstNum, secondNum);
         displayNewNum();
         return;
-    } else {
+    } 
+    if (typeof firstNum == 'number' && operation !== undefined) {
     total = operate(operation, firstNum, secondNum);
+    console.log(total);
     displayNewNum();
     }
     operation = e.target.value;
