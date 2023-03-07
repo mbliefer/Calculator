@@ -6,7 +6,7 @@ const buttons = document.querySelectorAll(".buttons");
 const calculator = document.querySelector(".calculator");
 let firstNum = '';
 let secondNum = '';
-let operation;
+let operation = '';
 let total;
 let shouldResetScreen = false;
 
@@ -37,28 +37,28 @@ const handleNumberKey = (e) => {
     //     };
     // });
 
-const handleOperatorKey = (e) => {
-    if (firstNum === '') {
-        firstNum = secondNum;
-        shouldResetScreen = true;
-        console.log(operation);
-        operation = e.key;
-    }
-    if (operation === "Enter" || operation === "=") {
-        e.preventDefault();
-        operate(operation, total, firstNum);
-    } else {
-        console.log(operation)
-        total = operate(operation, firstNum, secondNum);
-        displayNewNum();    
-    }
-    operators.forEach((operator) => {
-            if (operator.value == e.key && firstNum != '') {
-                operation = e.key;
-                console.log(operation);
-            };
-        });
-}
+// const handleOperatorKey = (e) => {
+//     if (firstNum === '') {
+//         firstNum = secondNum;
+//         shouldResetScreen = true;
+//         console.log(operation);
+//         operation = e.key;
+//     }
+//     if (operation === "Enter" || operation === "=") {
+//         e.preventDefault();
+//         operate(operation, total, firstNum);
+//     } else {
+//         console.log(operation)
+//         total = operate(operation, firstNum, secondNum);
+//         displayNewNum();    
+//     }
+//     operators.forEach((operator) => {
+//             if (operator.value == e.key && firstNum != '') {
+//                 operation = e.key;
+//                 console.log(operation);
+//             };
+//         });
+// }
 
 const handleOperatorClick = (e) => {
     if (firstNum === '') {
@@ -69,10 +69,11 @@ const handleOperatorClick = (e) => {
     if (operation === "Enter" || operation === "=") {
         e.preventDefault();
         total = operate(operation, firstNum, secondNum);
+        operation = undefined;
         displayNewNum();
         return;
     } 
-    if (typeof firstNum == 'number' && operation !== undefined) {
+    if (typeof firstNum === 'number' && operation !== '') {
     total = operate(operation, firstNum, secondNum);
     console.log(total);
     displayNewNum();
@@ -83,8 +84,10 @@ const handleOperatorClick = (e) => {
 
 const clearCalculator = () => {
     output.textContent = 0;
-    firstNum = 0;
-    total = 0;
+    firstNum = '';
+    secondNum = '';
+    total = '';
+    operation = '';
 }
 
 
