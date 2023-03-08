@@ -29,57 +29,29 @@ const handleNumberKey = (e) => {
     })
 }
 
-    // operators.forEach((operator) => {
-    //     if (operator.value == e.key) {
-    //         console.log(operator.id)
-    //         console.log(operation);
-    //         operate(operation, firstNum, secondNum);
-    //     };
-    // });
-
-// const handleOperatorKey = (e) => {
-//     if (firstNum === '') {
-//         firstNum = secondNum;
-//         shouldResetScreen = true;
-//         console.log(operation);
-//         operation = e.key;
-//     }
-//     if (operation === "Enter" || operation === "=") {
-//         e.preventDefault();
-//         operate(operation, total, firstNum);
-//     } else {
-//         console.log(operation)
-//         total = operate(operation, firstNum, secondNum);
-//         displayNewNum();    
-//     }
-//     operators.forEach((operator) => {
-//             if (operator.value == e.key && firstNum != '') {
-//                 operation = e.key;
-//                 console.log(operation);
-//             };
-//         });
-// }
-
 const handleOperatorClick = (e) => {
+    let evaluate = e.target.value;
+    if (operation === '=') {
+        firstNum = total;
+        operation = '';
+    }
     if (firstNum === '') {
         firstNum = secondNum;
         shouldResetScreen = true;
-        console.log(firstNum);
     }
-    if (operation === "Enter" || operation === "=") {
+    if (evaluate === "=") {
         e.preventDefault();
         total = operate(operation, firstNum, secondNum);
-        operation = undefined;
-        displayNewNum();
+        operation = e.target.value;
+        evaluateEquals();
         return;
     } 
-    if (typeof firstNum === 'number' && operation !== '') {
+    if (firstNum !== '' && operation !== '') {
     total = operate(operation, firstNum, secondNum);
-    console.log(total);
-    displayNewNum();
+    displayRunningTotal();
     }
     operation = e.target.value;
-    console.log(operation);
+    shouldResetScreen = true;
 }
 
 const clearCalculator = () => {
@@ -92,29 +64,36 @@ const clearCalculator = () => {
 
 
 function resetScreen() {
-    output.textContent = "";
+    output.textContent = '';
     shouldResetScreen = false;
 }
 
-function displayNewNum() {
+function displayRunningTotal() {
     output.textContent = total;
     firstNum = total;
     shouldResetScreen = true;
 };
 
+function evaluateEquals() {
+    output.textContent = total;
+    firstNum = '';
+    shouldResetScreen = true;
+}
+
 function printNumber(number) {
+    if (operation === '=') operation = '';
     if (output.textContent == 0 || shouldResetScreen) resetScreen();
     if (output.textContent.length < 9) {
         output.textContent += number;
         secondNum = parseFloat(output.textContent);
     }
     else {
-        calculator.classList.add("shake");
-        removeShake();
+        shakeCalculator();
     }
 }
 
-function removeShake() {
+function shakeCalculator() {
+    calculator.classList.add("shake");
     calculator.addEventListener('transitionend', () => {
         calculator.classList.remove("shake")
     });
