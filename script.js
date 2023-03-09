@@ -32,6 +32,7 @@ const handleNumberKey = (e) => {
 const handleOperatorClick = (e) => {
     let evaluate = e.target.value;
     if (operation === '=') {
+        console.log("=");
         firstNum = total;
         operation = '';
     }
