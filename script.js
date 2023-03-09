@@ -9,6 +9,7 @@ let secondNum = '';
 let operation = '';
 let total;
 let shouldResetScreen = false;
+let operatorClickedBeforeEquals = false;
 
 // enter number and display
 // enter operator and display either 1st number or total until new number is entered
@@ -47,12 +48,17 @@ const handleOperatorClick = (e) => {
         evaluateEquals();
         return;
     } 
-    if (firstNum !== '' && operation !== '') {
-    total = operate(operation, firstNum, secondNum);
-    displayRunningTotal();
-    }
+    // if (firstNum !== '' && operation !== '') {
+    // total = operate(operation, firstNum, secondNum);
+    // displayRunningTotal();
+    // }
+    if (operatorClickedBeforeEquals) {
+        total = operate(operation, firstNum, secondNum);
+        displayRunningTotal();
+        }
     operation = e.target.value;
     shouldResetScreen = true;
+    operatorClickedBeforeEquals = true;
 }
 
 const clearCalculator = () => {
@@ -79,6 +85,7 @@ function evaluateEquals() {
     output.textContent = total;
     firstNum = '';
     shouldResetScreen = true;
+    operatorClickedBeforeEquals = false;
 }
 
 function printNumber(number) {
