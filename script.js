@@ -7,15 +7,17 @@ const calculator = document.querySelector(".calculator");
 let firstNum = '';
 let secondNum = '';
 let operation = '';
+let previousOperation = '';
 let total;
 let shouldResetScreen = false;
 let operatorClickedBeforeEquals = false;
+let equalsClickedConsecutive = false;
 
 // enter number and display
 // enter operator and display either 1st number or total until new number is entered
 // 1st number is total OR 1st number(operand)second number is total
 
-const handleNumberKey = (e) => {
+const handleKeyboardInput = (e) => {
     numbers.forEach((number) => {
         if (number.value === e.key) {
             number.click();
@@ -24,16 +26,16 @@ const handleNumberKey = (e) => {
         };
     });
     operators.forEach((operator) => {
-        if (operator.value === e.key) {
+        if (operator.value === e.key || operator.id === e.key) {
             operator.click();
         }
     })
 }
 
 const handleOperatorClick = (e) => {
-    let evaluate = e.target.value;
+    let equalSignCheck = e.target.value;
+    console.log(equalSignCheck);
     if (operation === '=') {
-        console.log("=");
         firstNum = total;
         operation = '';
     }
@@ -41,24 +43,33 @@ const handleOperatorClick = (e) => {
         firstNum = secondNum;
         shouldResetScreen = true;
     }
-    if (evaluate === "=") {
-        e.preventDefault();
-        total = operate(operation, firstNum, secondNum);
-        operation = e.target.value;
-        evaluateEquals();
+    if (equalSignCheck === "=") {
+        evaluateEquals(e);
         return;
     } 
-    // if (firstNum !== '' && operation !== '') {
-    // total = operate(operation, firstNum, secondNum);
-    // displayRunningTotal();
-    // }
     if (operatorClickedBeforeEquals) {
-        total = operate(operation, firstNum, secondNum);
         displayRunningTotal();
         }
     operation = e.target.value;
     shouldResetScreen = true;
     operatorClickedBeforeEquals = true;
+}
+
+function evaluateEquals(equal) {
+    if (equalsClickedConsecutive) {
+        firstNum = total;
+        operation = previousOperation;
+    }
+    total = operate(operation, firstNum, secondNum);
+    previousOperation = operation;
+    operation = equal.target.value;
+    output.textContent = total;
+    firstNum = '';
+    shouldResetScreen = true;
+    operatorClickedBeforeEquals = false;
+    equalsClickedConsecutive = true;
+    console.log(previousOperation);
+    console.log(operation);
 }
 
 const clearCalculator = () => {
@@ -69,26 +80,20 @@ const clearCalculator = () => {
     operation = '';
 }
 
-
 function resetScreen() {
     output.textContent = '';
     shouldResetScreen = false;
 }
 
 function displayRunningTotal() {
+    total = operate(operation, firstNum, secondNum);
     output.textContent = total;
     firstNum = total;
     shouldResetScreen = true;
 };
 
-function evaluateEquals() {
-    output.textContent = total;
-    firstNum = '';
-    shouldResetScreen = true;
-    operatorClickedBeforeEquals = false;
-}
-
 function printNumber(number) {
+    equalsClickedConsecutive = false; 
     if (operation === '=') operation = '';
     if (output.textContent == 0 || shouldResetScreen) resetScreen();
     if (output.textContent.length < 9) {
@@ -134,10 +139,9 @@ operators.forEach((operator) => {
 });
 
 window.addEventListener('keydown', (e) => {
-    handleNumberKey(e);
-    // handleOperatorKey(e);
+    e.preventDefault();
+    handleKeyboardInput(e);
 });
-
 clear.addEventListener('click', clearCalculator);
 
 
