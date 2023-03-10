@@ -12,6 +12,7 @@ let total;
 let shouldResetScreen = false;
 let operatorClickedBeforeEquals = false;
 let equalsClickedConsecutive = false;
+let operatorIsSet = false;
 
 // enter number and display
 // enter operator and display either 1st number or total until new number is entered
@@ -32,9 +33,28 @@ const handleKeyboardInput = (e) => {
     })
 }
 
+const showSelectedOperator = (e) => {
+    operators.forEach((operator) => {
+        operator.classList.remove('activeOperator');
+        if (operator.value === e.target.value) {
+            operator.classList.add("activeOperator");
+        }
+    })
+}
+
+const removeSelectedOperator = () => {
+    operators.forEach((operator) => {
+        operator.classList.remove('activeOperator');
+    })
+}
+
+
 const handleOperatorClick = (e) => {
-    let equalSignCheck = e.target.value;
-    console.log(equalSignCheck);
+    let operatorScreen = e.target.value;
+    if(operatorIsSet) {
+        operation = operatorScreen;
+        return;
+    }
     if (operation === '=') {
         firstNum = total;
         operation = '';
@@ -43,33 +63,33 @@ const handleOperatorClick = (e) => {
         firstNum = secondNum;
         shouldResetScreen = true;
     }
-    if (equalSignCheck === "=") {
+    if (operatorScreen === "=") {
         evaluateEquals(e);
         return;
-    } 
+    }
     if (operatorClickedBeforeEquals) {
         displayRunningTotal();
-        }
+    }
     operation = e.target.value;
     shouldResetScreen = true;
     operatorClickedBeforeEquals = true;
+    operatorIsSet = true;
 }
 
-function evaluateEquals(equal) {
+function evaluateEquals(e) {
     if (equalsClickedConsecutive) {
         firstNum = total;
         operation = previousOperation;
     }
     total = operate(operation, firstNum, secondNum);
     previousOperation = operation;
-    operation = equal.target.value;
+    operation = e.target.value;
     output.textContent = total;
     firstNum = '';
     shouldResetScreen = true;
     operatorClickedBeforeEquals = false;
     equalsClickedConsecutive = true;
-    console.log(previousOperation);
-    console.log(operation);
+    operatorIsSet = false;
 }
 
 const clearCalculator = () => {
@@ -93,7 +113,9 @@ function displayRunningTotal() {
 };
 
 function printNumber(number) {
-    equalsClickedConsecutive = false; 
+    removeSelectedOperator();
+    equalsClickedConsecutive = false;
+    operatorIsSet = false;
     if (operation === '=') operation = '';
     if (output.textContent == 0 || shouldResetScreen) resetScreen();
     if (output.textContent.length < 9) {
@@ -123,7 +145,7 @@ const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
 
 function operate(operator, a, b) {
-    if (operator === "+") return(add(a, b));
+    if (operator === "+") return (add(a, b));
     if (operator === "-") return subtract(a, b);
     if (operator === "*") return multiply(a, b);
     if (operator === "/") return divide(a, b);
@@ -135,7 +157,10 @@ numbers.forEach((number) => {
 });
 // click on operator
 operators.forEach((operator) => {
-    operator.addEventListener('click', handleOperatorClick);
+    operator.addEventListener('click', (e) => {
+        showSelectedOperator(e);
+        handleOperatorClick(e)
+    });
 });
 
 window.addEventListener('keydown', (e) => {
