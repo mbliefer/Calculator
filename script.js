@@ -2,8 +2,10 @@ const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
 const output = document.querySelector('.output');
 const clear = document.querySelector('#clear');
-const buttons = document.querySelectorAll(".buttons");
-const calculator = document.querySelector(".calculator");
+const deleteBtn = document.querySelector('#delete');
+const negative = document.querySelector('#negative')
+const buttons = document.querySelectorAll('.buttons');
+const calculator = document.querySelector('.calculator');
 let firstNum = '';
 let secondNum = '';
 let operation = '';
@@ -31,6 +33,9 @@ const handleKeyboardInput = (e) => {
             operator.click();
         }
     })
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+        deleteBtn.click();
+    }
 }
 
 const showSelectedOperator = (e) => {
@@ -50,9 +55,9 @@ const removeSelectedOperator = () => {
 
 
 const handleOperatorClick = (e) => {
-    let operatorScreen = e.target.value;
+    let operatorPlaceHolder = e.target.value;
     if(operatorIsSet) {
-        operation = operatorScreen;
+        operation = operatorPlaceHolder;
         return;
     }
     if (operation === '=') {
@@ -61,9 +66,9 @@ const handleOperatorClick = (e) => {
     }
     if (firstNum === '') {
         firstNum = secondNum;
-        shouldResetScreen = true;
+        // shouldResetScreen = true;
     }
-    if (operatorScreen === "=") {
+    if (operatorPlaceHolder === "=") {
         evaluateEquals(e);
         return;
     }
@@ -92,12 +97,30 @@ function evaluateEquals(e) {
     operatorIsSet = false;
 }
 
+const makeNumberNegative = () => {
+    if (shouldResetScreen) {
+        shakeCalculator();
+        return;
+    }
+    output.textContent = -output.textContent;
+    secondNum = +output.textContent;
+}
+
 const clearCalculator = () => {
     output.textContent = 0;
     firstNum = '';
     secondNum = '';
     total = '';
     operation = '';
+}
+
+const deleteNumber = () => {
+    if (shouldResetScreen) {
+        shakeCalculator();
+        return;
+    }
+    output.textContent = output.textContent.slice(0, output.textContent.length - 1);
+    secondNum = +output.textContent;
 }
 
 function resetScreen() {
@@ -109,7 +132,7 @@ function displayRunningTotal() {
     total = operate(operation, firstNum, secondNum);
     output.textContent = total;
     firstNum = total;
-    shouldResetScreen = true;
+    // shouldResetScreen = true;
 };
 
 function printNumber(number) {
@@ -120,7 +143,7 @@ function printNumber(number) {
     if (output.textContent == 0 || shouldResetScreen) resetScreen();
     if (output.textContent.length < 9) {
         output.textContent += number;
-        secondNum = parseFloat(output.textContent);
+        secondNum = +output.textContent;
     }
     else {
         shakeCalculator();
@@ -168,5 +191,7 @@ window.addEventListener('keydown', (e) => {
     handleKeyboardInput(e);
 });
 clear.addEventListener('click', clearCalculator);
+deleteBtn.addEventListener('click', deleteNumber);
+negative.addEventListener('click', makeNumberNegative);
 
 
