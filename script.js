@@ -53,7 +53,6 @@ const removeSelectedOperator = () => {
     })
 }
 
-
 const handleOperatorClick = (e) => {
     let operatorPlaceHolder = e.target.value;
     if(operatorIsSet) {
@@ -66,7 +65,6 @@ const handleOperatorClick = (e) => {
     }
     if (firstNum === '') {
         firstNum = secondNum;
-        // shouldResetScreen = true;
     }
     if (operatorPlaceHolder === "=") {
         evaluateEquals(e);
@@ -81,20 +79,36 @@ const handleOperatorClick = (e) => {
     operatorIsSet = true;
 }
 
+function displayRunningTotal() {
+    formatTotal();
+    firstNum = total;
+};
+
 function evaluateEquals(e) {
     if (equalsClickedConsecutive) {
         firstNum = total;
         operation = previousOperation;
     }
-    total = operate(operation, firstNum, secondNum);
+    formatTotal();
     previousOperation = operation;
     operation = e.target.value;
-    output.textContent = total;
     firstNum = '';
     shouldResetScreen = true;
     operatorClickedBeforeEquals = false;
     equalsClickedConsecutive = true;
     operatorIsSet = false;
+}
+
+function formatTotal() {
+    total = operate(operation, firstNum, secondNum).toString();
+    if (total.length > 9) {
+        total = Number(total).toPrecision(8);
+        if (total.includes('e')) {
+            total = Number(total).toPrecision(6);
+        }
+    } 
+    output.textContent = total;
+    total = Number(total);
 }
 
 const makeNumberNegative = () => {
@@ -128,13 +142,6 @@ function resetScreen() {
     shouldResetScreen = false;
 }
 
-function displayRunningTotal() {
-    total = operate(operation, firstNum, secondNum);
-    output.textContent = total;
-    firstNum = total;
-    // shouldResetScreen = true;
-};
-
 function printNumber(number) {
     removeSelectedOperator();
     equalsClickedConsecutive = false;
@@ -142,6 +149,10 @@ function printNumber(number) {
     if (operation === '=') operation = '';
     if (output.textContent == 0 || shouldResetScreen) resetScreen();
     if (output.textContent.length < 9) {
+        if (output.textContent.includes('.') && number === '.') {
+            shakeCalculator();
+            return;
+        }
         output.textContent += number;
         secondNum = +output.textContent;
     }
@@ -158,7 +169,6 @@ function shakeCalculator() {
 }
 
 function removeTransition() {
-    console.log("active");
     this.classList.remove("active");
 }
 
@@ -168,7 +178,7 @@ const multiply = (a, b) => a * b;
 const divide = (a, b) => a / b;
 
 function operate(operator, a, b) {
-    if (operator === "+") return (add(a, b));
+    if (operator === "+") return add(a, b);
     if (operator === "-") return subtract(a, b);
     if (operator === "*") return multiply(a, b);
     if (operator === "/") return divide(a, b);
