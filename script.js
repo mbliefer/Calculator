@@ -136,6 +136,7 @@ function evaluateEquals(e) {
     operatorIsSet = false;
 }
 
+//makes a number negative, but do not want to allow user to change a calculated number to negative
 const makeNumberNegative = () => {
     if (shouldResetScreen) {
         shakeCalculator();
