@@ -99,7 +99,7 @@ function formatTotal() {
     total = operate(operation, firstNum, secondNum).toString();
     if (total.length > 9 && total.includes('.')) {
         if (total.includes('e')) {
-            total = Number(total).toPrecision(6);
+            total = Number(total).toPrecision(5);
         } else {
         total = Number(total).toFixed(8);
         }
@@ -107,7 +107,7 @@ function formatTotal() {
      else if (total.length > 9) {
         total = Number(total).toPrecision(8);
         if (total.includes('e')) {
-            total = Number(total).toPrecision(6);
+            total = Number(total).toPrecision(5);
         }
     } 
     output.textContent = total;
