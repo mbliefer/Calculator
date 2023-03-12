@@ -16,10 +16,11 @@ let operatorClickedBeforeEquals = false;
 let equalsClickedConsecutive = false;
 let operatorIsSet = false;
 
+//This calculator is designed to mimic the iphone calculator functionality
 // enter number and display
 // enter operator and display either 1st number or total until new number is entered
-// 1st number is total OR 1st number(operand)second number is total
 
+//Loop through keyboard input -> if it matches a button -> click()
 const handleKeyboardInput = (e) => {
     numbers.forEach((number) => {
         if (number.value === e.key) {
@@ -38,6 +39,7 @@ const handleKeyboardInput = (e) => {
     }
 }
 
+//highlight the operator button currently seclected
 const showSelectedOperator = (e) => {
     operators.forEach((operator) => {
         operator.classList.remove('activeOperator');
@@ -53,10 +55,25 @@ const removeSelectedOperator = () => {
     })
 }
 
+//when operator is selected it is held in a placeHolder to screen -> 
+//if another operator is selected before a number, operator is changed and
+    //the screening process starts over before any calculation. ->
+//if the placeHolder is '=', calculation will be made with previously selected operator ->
+//if previously selected operation is '=' this means an operator was selected before a number
+    //was selected, the firstNum will change to total so calculations can continue to be made.->
+//if firstNum has no value this means only one number has been entered and no calculations can
+    //be made yet. firstNum will be assigned the previously entered number. screen will be reset
+    //when new number is typed to store the new secondNum. ->
+//if 2 numbers have been entered but an operator is clicked before '=' it will string together
+    //operations and show the running total.
 const handleOperatorClick = (e) => {
     let operatorPlaceHolder = e.target.value;
     if(operatorIsSet) {
         operation = operatorPlaceHolder;
+        return;
+    }
+    if (operatorPlaceHolder === "=") {
+        evaluateEquals(e);
         return;
     }
     if (operation === '=') {
@@ -65,10 +82,6 @@ const handleOperatorClick = (e) => {
     }
     if (firstNum === '') {
         firstNum = secondNum;
-    }
-    if (operatorPlaceHolder === "=") {
-        evaluateEquals(e);
-        return;
     }
     if (operatorClickedBeforeEquals) {
         displayRunningTotal();
@@ -79,11 +92,35 @@ const handleOperatorClick = (e) => {
     operatorIsSet = true;
 }
 
+//the display is designed to hold only 10 characters ->
+//if calculation results in more characters the significant digits will be 
+    //reduced to 8 to take into account '.' and '-'
+function formatTotal() {
+    total = operate(operation, firstNum, secondNum).toString();
+    if (total.length > 9 && total.includes('.')) {
+        if (total.includes('e')) {
+            total = Number(total).toPrecision(6);
+        } else {
+        total = Number(total).toFixed(8);
+        }
+    }
+     else if (total.length > 9) {
+        total = Number(total).toPrecision(8);
+        if (total.includes('e')) {
+            total = Number(total).toPrecision(6);
+        }
+    } 
+    output.textContent = total;
+    total = Number(total);
+}
+
 function displayRunningTotal() {
     formatTotal();
     firstNum = total;
 };
 
+//if equals is selected consecutively, calculation will be made using previously 
+    //selected operator and number combo. ie - 1 + 2 = 3 = 5 = 7 = 9
 function evaluateEquals(e) {
     if (equalsClickedConsecutive) {
         firstNum = total;
@@ -97,18 +134,6 @@ function evaluateEquals(e) {
     operatorClickedBeforeEquals = false;
     equalsClickedConsecutive = true;
     operatorIsSet = false;
-}
-
-function formatTotal() {
-    total = operate(operation, firstNum, secondNum).toString();
-    if (total.length > 9) {
-        total = Number(total).toPrecision(8);
-        if (total.includes('e')) {
-            total = Number(total).toPrecision(6);
-        }
-    } 
-    output.textContent = total;
-    total = Number(total);
 }
 
 const makeNumberNegative = () => {
@@ -126,6 +151,7 @@ const clearCalculator = () => {
     secondNum = '';
     total = '';
     operation = '';
+    operatorClickedBeforeEquals = false;
 }
 
 const deleteNumber = () => {
@@ -135,6 +161,7 @@ const deleteNumber = () => {
     }
     output.textContent = output.textContent.slice(0, output.textContent.length - 1);
     secondNum = +output.textContent;
+    console.log(secondNum);
 }
 
 function resetScreen() {
@@ -142,6 +169,8 @@ function resetScreen() {
     shouldResetScreen = false;
 }
 
+//As soon as a number is selected the operator is un-highlighted
+//only 9 characters are allowed to be printed, calculator shakes if more are attempted
 function printNumber(number) {
     removeSelectedOperator();
     equalsClickedConsecutive = false;
