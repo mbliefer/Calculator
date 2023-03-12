@@ -47,7 +47,7 @@ body {
     box-sizing: border-box;
     margin-top: 20px;
     height: 75%;
-    width: auto;
+    width: 100%;
     bottom: 0;
     display: grid;
     grid-template-rows: repeat(5, 1fr);
