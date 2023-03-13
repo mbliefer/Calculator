@@ -47,10 +47,10 @@ body {
     box-sizing: border-box;
     margin-top: 20px;
     height: 75%;
-    width: 100%;
+    max-width: 100%;
     bottom: 0;
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    /* grid-template-rows: repeat(5, 1fr); */
     grid-template-columns: repeat(4, 1fr);
 }
 
@@ -69,6 +69,7 @@ body {
     font-family: 'Roboto', sans-serif;
     background-clip: padding-box;
     outline: none;
+    padding: 0;
 }
 
 .activeOperator, .buttons:hover {
