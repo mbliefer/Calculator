@@ -218,7 +218,7 @@ function operate(operator, a, b) {
 numbers.forEach((number) => {
     number.addEventListener('click', () => printNumber(number.value));
 });
-// click on operator
+
 operators.forEach((operator) => {
     operator.addEventListener('click', (e) => {
         showSelectedOperator(e);
