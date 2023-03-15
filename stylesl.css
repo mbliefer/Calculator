@@ -82,7 +82,7 @@ body {
     }
 }
 
-@media (hover:hover) {
+@media (any-pointer: course) {
 
     .active,
     .buttons:active {
