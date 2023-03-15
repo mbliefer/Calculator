@@ -74,7 +74,7 @@ body {
     padding: 0;
 }
 
-@media (hover:none) {
+@media (hover:hover) {
 
     .activeOperator,
     .buttons:hover {
@@ -82,11 +82,14 @@ body {
     }
 }
 
-.active,
-.buttons:active {
-    transform: translateY(2px);
-    box-shadow: 0 3px;
-    transition: .09s;
+@media (hover:hover) {
+
+    .active,
+    .buttons:active {
+        transform: translateY(2px);
+        box-shadow: 0 3px;
+        transition: .09s;
+    }
 }
 
 .operator {
