@@ -16,6 +16,12 @@ let operatorClickedBeforeEquals = false;
 let equalsClickedConsecutive = false;
 let operatorIsSet = false;
 
+window.onload = function() {
+    if(/iP(hone|ad)/.test(window.navigator.userAgent)) {
+        document.body.addEventListener('touchstart', function() {}, false);
+    }
+}
+
 //This calculator is designed to mimic the iphone calculator functionality
 // enter number and display
 // enter operator and display either 1st number or total until new number is entered
