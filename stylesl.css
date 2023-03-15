@@ -82,7 +82,7 @@ body {
     }
 }
 
-@media (any-pointer: course) {
+@media (pointer: fine) {
 
     .active,
     .buttons:active {
