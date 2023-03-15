@@ -74,16 +74,16 @@ body {
     padding: 0;
 }
 
-    .activeOperator,
-    .buttons:hover {
-        opacity: 0.6;
-    }
-
     .active,
     .buttons:active {
         transform: translateY(2px);
         box-shadow: 0 3px;
         transition: .09s;
+    }
+
+    .activeOperator,
+    .buttons:hover {
+        opacity: 0.6;
     }
 
 .operator {
