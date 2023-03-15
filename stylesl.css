@@ -74,15 +74,10 @@ body {
     padding: 0;
 }
 
-@media (hover:hover) {
-
     .activeOperator,
     .buttons:hover {
         opacity: 0.6;
     }
-}
-
-@media (pointer: fine) {
 
     .active,
     .buttons:active {
@@ -90,7 +85,6 @@ body {
         box-shadow: 0 3px;
         transition: .09s;
     }
-}
 
 .operator {
     background-color: orange;
