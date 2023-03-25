@@ -62,34 +62,34 @@ const removeSelectedOperator = () => {
 }
 
 //when operator is selected it is held in a placeHolder to screen -> 
-//if another operator is selected before a number, operator is changed and
+//(1) if another operator is selected before a number, operator is changed and
     //the screening process starts over before any calculation. ->
-//if the placeHolder is '=', calculation will be made with previously selected operator ->
-//if previously selected operation is '=' this means an operator was selected before a number
+//(2)if the placeHolder is '=', calculation will be made with previously selected operator ->
+//(3)if previously selected operation is '=' this means an operator was selected before a number
     //was selected, the firstNum will change to total so calculations can continue to be made.->
-//if firstNum has no value this means only one number has been entered and no calculations can
+//(4)if firstNum has no value this means only one number has been entered and no calculations can
     //be made yet. firstNum will be assigned the previously entered number. screen will be reset
     //when new number is typed to store the new secondNum. ->
-//if 2 numbers have been entered but an operator is clicked before '=' it will string together
+//(5)if 2 numbers have been entered but an operator is clicked before '=' it will string together
     //operations and show the running total.
 const handleOperatorClick = (e) => {
     let operatorPlaceHolder = e.target.value;
-    if(operatorIsSet) {
+    if(operatorIsSet) { //*1
         operation = operatorPlaceHolder;
         return;
     }
-    if (operatorPlaceHolder === "=") {
+    if (operatorPlaceHolder === "=") { //*2
         evaluateEquals(e);
         return;
     }
-    if (operation === '=') {
+    if (operation === '=') { //*3
         firstNum = total;
         operation = '';
     }
-    if (firstNum === '') {
+    if (firstNum === '') { //*4
         firstNum = secondNum;
     }
-    if (operatorClickedBeforeEquals) {
+    if (operatorClickedBeforeEquals) { //*5
         displayRunningTotal();
     }
     operation = e.target.value;
